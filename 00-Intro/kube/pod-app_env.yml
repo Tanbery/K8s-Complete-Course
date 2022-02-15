@@ -3,11 +3,11 @@ kind: Pod
 metadata: 
   name: app-env
   labels: 
-    app: helloworld
+    app: hello-node-app
 spec: 
   containers:
   - name: app-env
-    image: tanbery/app_env #dockerhubID/Repo
+    image: tanbery/hello-node-app #dockerhubID/Repo
     ports: 
     - name: nodejs-port 
       containerPort: 3000

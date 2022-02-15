@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secrets
+type: Opaque
+data:
+  env_username: cm9vdA==
+  env_password: cGFzc3dvcmQ=
+  db_username: cm9vdA==
+  db_password: cGFzc3dvcmQ=
