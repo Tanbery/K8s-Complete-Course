@@ -10,7 +10,7 @@ curl localhost:3000
 
 kubectl apply -f pod-app_env.yml #create a pod 
 kubectl apply -f srv-app_env.yml #create a service
-kubectl port-forward app-env.rose.com 8081:3000 # pod also can be exposed for a port
+kubectl port-forward app-env.rose.com 8081:3100 # pod also can be exposed for a port
 minikube service app-env-service --url | xargs curl #get a service URL and send curl command
 
 #some useful commands
