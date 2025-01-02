@@ -1,0 +1,11 @@
+
+#minikube service hello-minikube
+GET http://192.168.49.2:31611/
+
+#####
+
+
+GET http://localhost:8081/
+###
+
+GET http://192.168.49.2:30324

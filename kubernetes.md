@@ -35,12 +35,16 @@ minikube service nodehelloworld-service --url #to get the service URL
 kubectl attach nodehelloworld.com
 kubectl exec nodehelloworld.com -- ls /app
 
+
 kubectl run -i --tty busybox --image=busybox --restart=Never -- sh #connect pod from an dummy pod
 
 kubectl attach <pod name> -i
 kubectl exec -it <pod name> --bash
 kubectl logs <podname>
 kubectl run -i busybox --image=busybox --restart=never --sh
+
+
+kubectl label node <nodename> <labelname> #Labelname should be set in nodeSelector
 
 kubectl delete pod <pod_name>
 
@@ -52,12 +56,19 @@ kubectl rollout status
 kubectl rollout history
 
 minikube service <service-name> --url
+
+watch -n1 kubectl get pods
+minikube service app-env-service --url | xargs curl
+
+echo -n "password" | base64
+
 ```
 
 ```shell
     ssh-keygen -f .ssh/id_rsa
     cat .ssh/id_rsa.pub
 ```
+
 
 ```shell
 kubectl get nodes -o json | jq ".items[] | {name : .metadata.name} + .status.capacity"
@@ -204,3 +215,4 @@ kubectl rollout undo deployment worker --to-revision=1
 
 ab -c 10 -n 1000 http://IP/1
 ```
+
