@@ -69,6 +69,7 @@ echo -n "password" | base64
     cat .ssh/id_rsa.pub
 ```
 
+# Docker Captain Kubernetes
 
 ```shell
 kubectl get nodes -o json | jq ".items[] | {name : .metadata.name} + .status.capacity"
@@ -88,11 +89,11 @@ kubectl get pods  --all-namespaces
 kubectl get pods -n kube-system
 
 
-kubectl create deployment pipong --image alpine -- ping 1.1.1.1
-kubectl run pipong --image alpine ping 1.1.1.1
-kubectl logs pods/pipong
-kubectl delete deployments/pipong
-kubectl delete pods/pipong
+kubectl create deployment pingpong --image alpine -- ping 1.1.1.1
+kubectl run pingpong --image alpine ping 1.1.1.1
+kubectl logs pods/pingpong
+kubectl delete deployments/pingpong
+kubectl delete pods/pingpong
 
 kubectl scale deployment pingpong --replicas 3
 
@@ -100,8 +101,8 @@ kubectl create cronjob myjob --image=alpine --schedule="*/3 * * * *" --restart=O
 kubectl get cronjobs
 kubectl delete cronjob/myjob
 
-kubectl logs -l pods/pipong --tail 1 --follow 
-kubectl logs -l pods/pipong --tail 1 --f --timestamps
+kubectl logs -l pods/pingpong --tail 1 --follow 
+kubectl logs -l pods/pingpong --tail 1 --f --timestamps
 
 watch kubectl get po
 kubectl get po -w # watch the pods if their status is changed.
@@ -125,13 +126,22 @@ kubectl describe svc httpenv
 kubectl get endpoints -o yaml
 kubectl get po -l app=httpenv -o wide 
 
-watch kubectl get all --all-namespaces #see everyhing
+watch kubectl get all --all-namespaces #see everything
+```
 
+## Docker Coin in DockerCompose
+
+```shell
 #DockerCoins in DockerCompose
 curl -o dockercoins.yml https://k8smastery.com/dockercoins-compose.yml
 docker-compose -f dockercoins.yml up
 docker-compose -f dockercoins.yml down
 
+```
+
+## Docker Coin in Kubernetes
+
+```shell
 #DockerCoins in K8s
 kubectl get deployments.apps -w
 kubectl create deployment redis --image=redis
@@ -178,7 +188,11 @@ kubectl label pod -l  app=rng, pod-template-hash enabled-
 kubectl delete -f https://k8smastery.com/dockercoins.yaml
 kubectl delete ds/rng
 kubectl delete -f https://k8smastery.com/insecure-dashboard.yaml
+```
 
+## How to create YAML file
+
+```shell
 #YAML
 #Key/Value Pairs
 #Array/List
@@ -192,8 +206,12 @@ kubectl delete -f https://k8smastery.com/insecure-dashboard.yaml
 #Create a default YAML File with dry-run option
 kubectl create namespace awesome-app -o yaml --dry-run --validate=false
 kubectl create namespace awesome-app -o yaml --server-dry-run  --validate=false #all operation/check/validation is done except writing to ETCDB.
+```
 
-#Rolling update: it is only for deployments/daemonsets/statefulsets. 
+## Rolling Upgrade
+
+```shell
+#Rolling update: It is only for deployments/daemonsets/statefulsets. 
 #create a new replicaset
 #maxUnavailable and mxSurge: 
 #minumum pods = replicas - maxUnavailable
@@ -211,8 +229,36 @@ kubectl rollout history deployment worker
 
 kubectl describe replicasets.apps -l app=worker | grep -A3 Annotations
 kubectl rollout undo deployment worker --to-revision=1
-
-
-ab -c 10 -n 1000 http://IP/1
 ```
 
+## Health Check
+
+```shell
+#Health Check is per container
+#Probes : liveness/readiness/startup(Alpha)
+#handler: HTTP, TCP, Exec
+
+#liveness: this is container alive
+    #restartPolicy -> Never, OnFailure, Always
+#Rediness: Ready to accept requests
+#StartUp: prvious is InitialDelaySeconds
+
+#Timing and Thresholds
+#periodSeconds -> Default 10 
+#timeoutSeconds -> Default 1 
+#successThreshold -> Default 1 
+#failureThreshold -> Default 3
+#initialDelaySeconds -> Default 0
+    livenessProbe:
+          exec:
+            command: ["redis-cli", "ping"]
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 1
+# if there is no endpoint for worker container, health check can be done through logs and a success file. 
+# health check will not check external serverices. it is just for contaniner. Dependecy can be implemented in container as /heathy end points
+    
+ab -c 10 -n 1000 http://IP/1
+```

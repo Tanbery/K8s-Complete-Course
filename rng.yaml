@@ -20,6 +20,14 @@ spec:
         name: rng
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
+        # livenessProbe:
+        #   exec:
+        #     command: ["redis-cli", "ping"]
+        #   httpGet:
+        #     path: /
+        #     port: 80
+        #   initialDelaySeconds: 10
+        #   periodSeconds: 1
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
